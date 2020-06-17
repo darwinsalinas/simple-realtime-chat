@@ -6,6 +6,11 @@
       "src": "/chat",
       "dest": "/index.js",
       "methods": ["GET"]
+    },
+    {
+      "src": "/socket.io/socket.io.js",
+      "dest": "/index.js",
+      "methods": ["GET"]
     }
   ]
 }
