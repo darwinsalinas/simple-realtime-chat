@@ -13,12 +13,12 @@
       "methods": ["GET"]
     },
     {
-      "src": "/socket.io",
+      "src": "/socket.io/",
       "dest": "/index.js",
       "methods": ["GET"]
     },
     {
-      "src": "/socket.io",
+      "src": "/socket.io/",
       "dest": "/index.js",
       "methods": ["POST"]
     }
