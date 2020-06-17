@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (request, response) => {
+    console.log('index')
     response.sendFile(__dirname + '/index.html')
 })
 
