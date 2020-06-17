@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.get('/', (request, response) => {
     console.log('index')
-    response.sendFile(__dirname + '/templates/index.html')
+    response.sendFile(__dirname + '/src/templates/index.html')
 })
 
 app.post('/', (request, response) => {
@@ -22,7 +22,7 @@ app.post('/', (request, response) => {
 })
 
 app.get('/chat', (request, response) => {
-    response.sendFile(__dirname + '/templates/chat.html')
+    response.sendFile(__dirname + '/src/templates/chat.html')
 })
 
 io.on('connection', (socket) => {
