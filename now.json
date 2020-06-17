@@ -4,22 +4,22 @@
   "routes": [
     {
       "src": "/chat",
-      "dest": "/index.js",
+      "dest": "/src/index.js",
       "methods": ["GET"]
     },
     {
       "src": "/socket.io/socket.io.js",
-      "dest": "/index.js",
+      "dest": "/src/index.js",
       "methods": ["GET"]
     },
     {
       "src": "/socket.io/",
-      "dest": "/index.js",
+      "dest": "/src/index.js",
       "methods": ["GET"]
     },
     {
       "src": "/socket.io/",
-      "dest": "/index.js",
+      "dest": "/src/index.js",
       "methods": ["POST"]
     }
   ]
