@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Real Time</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        .container{
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .formulario input{
+            border-radius: 8px;
+            padding: 10px;
+            border: none;
+            box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+        }
+        .formulario button{
+            border-radius: 8px;
+            padding: 10px;
+            border: none;
+            background-color: blueviolet;
+            color: white;
+            box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid rgba(37, 2, 59, 0.5);
+        }
+
+      </style>
+</head>
+<body>
+    <div class="container">
+        <section class="formulario">
+            <form action="" id="formulario" method="POST">
+                <input id="nombre" name="nombre" autocomplete="off" placeholder="Escribe tu nombre" required/>
+                <button type="submit">Entrar</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

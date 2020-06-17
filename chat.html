@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Real Time</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        ul{
+            list-style: none;
+        }
+        .container{
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+        }
+        .usuarios-conectados{
+            width: 30%;
+            background: rgb(31, 30, 30);
+            height: 100vh;
+            padding: 10px;
+            color: lightgray;
+            overflow-y: scroll;
+        }
+        #usuarios li{
+            position: relative;
+        }
+        #usuarios li::before{
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+            background: greenyellow;
+            right: 0;
+        }
+        .usuarios__title{
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .chat{
+            padding: 10px;
+            width: 70%;
+            background:lightgray;
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll;
+        }
+        .chat__messages {
+            height: 90%;
+
+        }
+        .chat__form{
+            height: 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .form-messsage{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            height: 100%;
+
+        }
+        .form-messsage input{
+            width: 70%;
+            height: 50px;
+            border: none;
+            padding: 0 10px;
+            border-radius: 8px;
+            box-shadow: 1px -1px 5px rgba(0,0,0,0.3);
+        }
+        .form-messsage button{
+            height: 50px;
+            width: 20%;
+            border: none;
+            border-radius: 8px;
+        }
+        button{
+            border-radius: 8px;
+            padding: 10px;
+            border: none;
+            background-color: blueviolet;
+            color: white;
+            box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid rgba(37, 2, 59, 0.5);
+        }
+      </style>
+</head>
+<body>
+    <div class="container">
+        <section class="usuarios-conectados">
+            <h2 class="usuarios__title">Usuarios Conectados</h2>
+            <div id="usuarios">
+            </div>
+        </section>
+        <section class="chat">
+            <div class="chat__messages">
+                <ul id="mensajes"></ul>
+            </div>
+            <div class="chat__form">
+                <form action="" id="formulario" onsubmit="handleSubmitForm();return false">
+                    <input id="nombre" autocomplete="off" placeholder="Escribe tu nombre" hidden/>
+                    <div class="form-messsage">
+                        <input id="mensaje" autocomplete="off" placeholder="Escribe tu mensaje"/>
+                        <button type="submit">Enviar</button>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const fakeName = `El fulanito ${Math.floor(Math.random() * (10 - 1)) + 1}`
+        const socket = io();
+
+        const params = new URLSearchParams(window.location.search)
+        const usuario = params.get('nombre')
+        socket.emit('crear-usuario', usuario)
+
+        const $formulario = document.getElementById('formulario')
+        const $nombre = document.getElementById('nombre')
+        const $mensaje = document.getElementById('mensaje')
+        const $mensajes = document.getElementById('mensajes')
+        const $usuarios = document.getElementById('usuarios')
+        const handleSubmitForm = () => {
+            let mensaje = {
+                text: $mensaje.value,
+                nombre: usuario
+            }
+            socket.emit('new-message', mensaje)
+            $mensaje.value = ''
+        }
+
+        socket.on('new-message', (mensaje) => {
+            let mensajeElement = document.createElement('li')
+            let mensajeText = document.createTextNode(`${mensaje.nombre}: ${mensaje.text}`)
+            mensajeElement.appendChild(mensajeText)
+            $mensajes.appendChild(mensajeElement)
+        })
+
+        socket.on('usuarios-conectados', (usuarios) => {
+            let usersElement = document.createElement('ul')
+            for(const usuario of usuarios){
+                let userElement = document.createElement('li')
+                let userText = document.createTextNode(`${usuario.nombre}`)
+                userElement.appendChild(userText)
+                usersElement.appendChild(userElement)
+            }
+            $usuarios.innerHTML = '';
+            $usuarios.appendChild(usersElement)
+        })
+
+        socket.on('mensajes', (mensajes) => {
+            $mensajes.innerHTML = '';
+            for(const mensaje of mensajes){
+                let mensajeElement = document.createElement('li')
+                let mensajeText = document.createTextNode(`${mensaje.mensaje.nombre}: ${mensaje.mensaje.text}`)
+                mensajeElement.appendChild(mensajeText)
+                $mensajes.appendChild(mensajeElement)
+            }
+        })
+
+    </script>
+</body>
+</html>
