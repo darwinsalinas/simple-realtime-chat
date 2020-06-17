@@ -16,6 +16,11 @@
       "src": "/socket.io/",
       "dest": "/index.js",
       "methods": ["GET"]
+    },
+    {
+      "src": "/socket.io/",
+      "dest": "/index.js",
+      "methods": ["POST"]
     }
   ]
 }
