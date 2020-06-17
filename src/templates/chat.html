@@ -142,7 +142,7 @@
 
         socket.on('new-message', (mensaje) => {
             let mensajeElement = document.createElement('li')
-            let mensajeText = document.createTextNode(`${mensaje.nombre}: ${mensaje.text}`)
+            let mensajeText = document.createTextNode(`${mensaje.nombre}: ${mensaje.message}`)
             mensajeElement.appendChild(mensajeText)
             $mensajes.appendChild(mensajeElement)
         })
@@ -151,7 +151,7 @@
             let usersElement = document.createElement('ul')
             for(const usuario of usuarios){
                 let userElement = document.createElement('li')
-                let userText = document.createTextNode(`${usuario.nombre}`)
+                let userText = document.createTextNode(`${usuario.name}`)
                 userElement.appendChild(userText)
                 usersElement.appendChild(userElement)
             }
@@ -163,10 +163,14 @@
             $mensajes.innerHTML = '';
             for(const mensaje of mensajes){
                 let mensajeElement = document.createElement('li')
-                let mensajeText = document.createTextNode(`${mensaje.mensaje.nombre}: ${mensaje.mensaje.text}`)
+                let mensajeText = document.createTextNode(`${mensaje.nombre}: ${mensaje.message}`)
                 mensajeElement.appendChild(mensajeText)
                 $mensajes.appendChild(mensajeElement)
             }
+        })
+
+        socket.on('changeData', (users) => {
+            console.log(users)
         })
 
     </script>

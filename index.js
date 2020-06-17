@@ -3,9 +3,18 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose')
+mongoose.connect('mongodb+srv://admin:admin@cluster0-9fu6k.mongodb.net/chat_sgu?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
-let usuarios = []
-let mensajes = []
+const User = require('./src/models/User')
+const Chat = require('./src/models/Chat')
+
+// const changeStream = User.watch()
+// const chatChangeStream = Chat.watch()
+
+// chatChangeStream.on('change', (change) =>{
+//     console.log(change)
+//     io.emit('changeData', change)
+// })
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,29 +36,54 @@ app.get('/chat', (request, response) => {
 
 io.on('connection', (socket) => {
 
-    io.emit('mensajes', mensajes)
+    User.find({}, (err, users) => {
+        io.emit('usuarios', users)
+    })
+
+    Chat.find({}, (err,mensajes) => {
+        io.emit('mensajes', mensajes)
+    })
 
     socket.on('crear-usuario', (nombre) => {
-        const usuario = {
-            id: socket.id,
-            nombre: nombre
-        }
-        usuarios = [...usuarios, usuario]
-        io.emit('usuarios-conectados', usuarios)
+
+        User.findOne({name: nombre}, (err, usuario) => {
+            if(usuario){
+                User.find({}, (err, usuarios)=>{
+                    io.emit('usuarios-conectados', usuarios)
+                })
+            } else {
+                const u = {
+                    id: socket.id,
+                    name: nombre
+                }
+                const user = new User(u);
+                user.save().then(() => {
+                    User.find({}, (err, usuarios) => {
+                        io.emit('usuarios-conectados', usuarios)
+                    })
+                });
+
+            }
+        })
     })
 
     socket.on('disconnect', () => {
-        usuarios = usuarios.filter(it => it.id !== socket.id)
-        io.emit('usuarios-conectados', usuarios)
+        console.log('usuario desconectado', socket.id)
+        User.deleteOne({id: socket.id}, (err) => {
+            User.find({}, (err, usuarios)=>{
+                io.emit('usuarios-conectados', usuarios)
+            })
+        })
     })
 
     socket.on('new-message', (mensaje) => {
         const newmensaje = {
             user_id: socket.id,
-            mensaje: mensaje
+            message: mensaje.text,
+            nombre: mensaje.nombre
         }
-        mensajes = [...mensajes, newmensaje]
-        io.emit('new-message', mensaje)
+        const chat = new Chat(newmensaje);
+        chat.save().then(() => io.emit('new-message', newmensaje));
     })
 })
 
