@@ -2,7 +2,9 @@ const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const bodyParser = require("body-parser");
-let {usuarios, mensajes} = require('./bd');
+
+const usuarios = []
+const mensajes = []
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
