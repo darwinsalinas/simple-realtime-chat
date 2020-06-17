@@ -2,9 +2,10 @@ const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose')
 
-const usuarios = []
-const mensajes = []
+let usuarios = []
+let mensajes = []
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,7 +13,7 @@ app.use(bodyParser.json());
 
 app.get('/', (request, response) => {
     console.log('index')
-    response.sendFile(__dirname + '/index.html')
+    response.sendFile(__dirname + '/templates/index.html')
 })
 
 app.post('/', (request, response) => {
@@ -21,7 +22,7 @@ app.post('/', (request, response) => {
 })
 
 app.get('/chat', (request, response) => {
-    response.sendFile(__dirname + '/chat.html')
+    response.sendFile(__dirname + '/templates/chat.html')
 })
 
 io.on('connection', (socket) => {
